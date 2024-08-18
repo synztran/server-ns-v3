@@ -1,0 +1,1 @@
+docker buildx build --platform linux/amd64, --push -t dockerhub.thuannc.com/noobstore-server2 .

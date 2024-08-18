@@ -1,0 +1,10 @@
+fastapi
+Pillow
+python-multipart
+transformers
+uvicorn
+motor
+pydantic[email]
+passlib
+python-jose
+python-dotenv
