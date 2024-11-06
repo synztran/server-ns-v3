@@ -12,7 +12,7 @@ class Token(BaseModel):
     # access_token: str
     # token_type: str
     data: List[DataToken]
-    
+
 
 class TokenData(BaseModel):
     email: str | None = None
@@ -23,8 +23,8 @@ class User(BaseModel):
     email: str
     photo: str
     role: str | None = None
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    createdAt: datetime | None = None
+    updatedAt: datetime | None = None
 
     class Config:
         from_attributes = True
@@ -43,21 +43,17 @@ class CreateUserSchema(User):
     passwordConfirm: str
     verified: bool = False
 
-
 class LoginUserSchema(BaseModel):
     email: EmailStr
     password: str
-
 
 class UserResponseSchema(User):
     id: str
     pass
 
-
 class UserResponse(BaseModel):
     status: str
     user: UserResponseSchema
-
 
 def ErrorResponseModel(code, message):
     return {

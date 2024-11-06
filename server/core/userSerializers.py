@@ -1,4 +1,4 @@
-def userEntity(user):
+def user_entity(user):
     if "verified_at" in user:
         # Check if the value of "verified_at" is a string
         if isinstance(user["verifiedAt"], str):

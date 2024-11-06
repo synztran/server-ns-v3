@@ -2,7 +2,6 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from enum import Enum
 
-
 class StatusGB(Enum):
     INSTOCK = "INSTOCK"
     OUTSOTCK = "OUTSOTCK"
@@ -10,14 +9,12 @@ class StatusGB(Enum):
     TBA = "TBA"
     ALL = ""
 
-
 class CategoryType(Enum):
     TBA = "TBD"
     KEYBOARD = "KEYBOARD",
     SWITCH = "SWITCH",
     KEYCAP = "KEYCAP",
     ACCESSORY = "ACCESSORY",
-
 
 class Image(BaseModel):
     path: str
@@ -28,75 +25,72 @@ class CollapseContent(BaseModel):
     content: str
 
 class CategorySchema(BaseModel):
-    category_id: str = Field(...)
-    # category_url_name: str
+    categoryId: str = Field(...)
     slug: str
-    category_name: str
+    categoryName: str
     manufacturing: str
     author: str
-    proxy_host: str
-    status_gb: StatusGB
+    proxyHost: str
+    statusGb: StatusGB
     type: CategoryType
-    date_start: str
-    date_end: str
-    date_payment: str
-    min_price: int
-    max_price: int
+    dateStart: str
+    dateEnd: str
+    datePayment: str
+    minPrice: int
+    maxPrice: int
     tax: int
     handle: int
     thumbnail: Image
-    pic_list: List[Image]
-    pic_profile: Image
+    picList: List[Image]
+    picProfile: Image
     content: str
-    time_line: None
-    is_active: bool = False
+    timeLine: None
+    isActive: bool = False
     description: str = None
-    collapse_content: CollapseContent
-    sale_price: int = 0
-    is_active: bool = False
+    collapseContent: CollapseContent
+    salePrice: int = 0
+    isActive: bool = False
 
     class Config:
         json_schema_extra = {
             "example": {
-                "category_id": 'abc',
-                # "category_url_name": "123456abc",
+                "categoryId": 'abc',
                 "slug": "abc",
-                "category_name": "Hari",
+                "categoryName": "Hari",
                 "manufacturing": "Chan",
                 "author": "A Lu",
-                "proxy_host": "text",
-                "status_gb": StatusGB.TBA,
+                "proxyHost": "text",
+                "statusGb": StatusGB.TBA,
                 "type": 0,
-                "date_start": '',
-                "date_end": '',
-                "date_payment": '',
-                "min_price": 0,
-                "max_price": 0,
+                "dateStart": '',
+                "dateEnd": '',
+                "datePayment": '',
+                "minPrice": 0,
+                "maxPrice": 0,
                 "tax": 0,
                 "handle": 0,
                 "thumbnail": {
                     "path": "",
                     "size": 0
                 },
-                "pic_list": [],
-                "pic_profile": {
+                "picList": [],
+                "picProfile": {
                     "path": "",
                     "size" : 0
                 },
                 "content":  "",
-                "get_noti": False,
-                "time_line": {},
-                "is_active": False,
+                "getNoti": False,
+                "timeLine": {},
+                "isActive": False,
                 "description": "",
-                "collapse_content": [],
-                "sale_price": 0,
-                "is_active": False
+                "collapseContent": [],
+                "salePrice": 0,
+                "isActive": False
             }
         }
 
-
 class ParamsGet(BaseModel):
-    status_gb: Optional[str] = ""
+    statusGb: Optional[str] = ""
     slug: Optional[str] = ""
     ids: Optional[List[str]] = []
 
@@ -107,7 +101,6 @@ def ResponseModel(data, message):
         "message": message,
         "status": "OK"
     }
-
 
 def ErrorResponseModel(error, code, message):
     return {"error": error, "code": code, "message": message}

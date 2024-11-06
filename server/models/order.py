@@ -37,22 +37,14 @@ class OrderInfo(BaseModel):
     deliveryMethod: str
     paymentMethod: str
     billingAddress: Optional[str | dict] = None
-    orderNote: Optional[str] = ''
+    note: Optional[str] = ''
 
 class ServiceItem(BaseModel):
     name: str
     description: str
     price: float
 
-# class ProductItem(BaseModel):
-#     name: str
-#     description: str
-#     category: str
-#     price: float
-
 class OrderSchema(BaseModel):
-    # orderId: Optional[str] = Field(...)
-    # customerId: Optional[str] = Field(...)
     services: List[CartService] = []
     products: List[CartProductSchema] = []
     orderedAt: Optional[str] = ''

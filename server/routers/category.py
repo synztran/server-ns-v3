@@ -1,85 +1,29 @@
-import json
-from fastapi import APIRouter, Body, HTTPException, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-from datetime import datetime
-
-from server.database import (
-    retrieveCategories,
-    retrieveCategoriesByParams,
-    retrieve_category_by_id,
-    add_category,
-    add_account
-)
-
+from fastapi import APIRouter, Body
 from server.models.category import (
-    ErrorResponseModel,
-    ResponseModel,
     CategorySchema,
     ParamsGet,
-    StatusGB
+)
+from server.crud.category import (
+    crud_get_all_category,
+    crud_add_category,
+    crud_get_category_by_id,
+    crud_get_categories_by_ids
 )
 
 router = APIRouter()
 
-# Retrieve all category
-
-class CustomeJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        return json.JSONEncoder.default(self, obj)
-
-
-@router.get("")
+@router.get("/get-all", response_description="Categories data retrieved")
 async def get_all_category(status_gb: str = "", slug: str = ""):
-    categories = await retrieveCategories(status_gb, slug)
-    categories = jsonable_encoder(categories)
-    if categories:
-        return JSONResponse(
-            content={
-                "data": categories, 
-                "code": status.HTTP_200_OK, 
-                "message": "Categories data retrieve successfully", 
-                "status": "OK"
-            },
-            status_code=status.HTTP_200_OK
-        )
-    return JSONResponse(
-        content={"data": categories, "code": status.HTTP_200_OK, "message": "Empty list returned", status: "OK"},
-        status_code=status.HTTP_200_OK
-    )
+   return await crud_get_all_category(ParamsGet(status_gb=status_gb, slug=slug))
 
-@router.post("", response_description="Category data added into the database")
+@router.post("/add", response_description="Category data added into the database")
 async def add_category_data(category: CategorySchema = Body(...)):
-    category = jsonable_encoder(category)
-    new_category = await add_category(category)
-    return ResponseModel(new_category, "Account added successfully.")
+    return await crud_add_category(category)
 
 @router.get("/{slug}", response_description="Category detail data from db")
 async def get_category_by_id(slug: str):
-    category = await retrieve_category_by_id(slug)
-    if category:
-        return ResponseModel(category, f"Category with ID {slug} retrieved successfully")
-    
-    raise HTTPException(status_code=404, detail=f"Category with ID {slug} not found")
+    return await crud_get_category_by_id(slug)
 
 @router.post("/getCategoriesByIds", response_description="Get categories by params")
-async def getCategoriesByIds(params: ParamsGet):
-    categories = await retrieveCategoriesByParams(params)
-    categories = jsonable_encoder(categories)
-    if categories:
-        return JSONResponse(
-            content={
-                "data": categories, 
-                "code": status.HTTP_200_OK, 
-                "message": "Categories data retrieve successfully", 
-                "status": "OK"
-            },
-            status_code=status.HTTP_200_OK
-        )
-    return JSONResponse(
-        content={"data": categories, "code": status.HTTP_200_OK, "message": "Empty list returned", status: "OK"},
-        status_code=status.HTTP_200_OK
-    )
-    return ResponseModel(params, "get categories success.")
+async def get_categories_by_ids(params: ParamsGet):
+    return await crud_get_categories_by_ids(params)

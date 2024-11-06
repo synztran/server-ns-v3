@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, Field, constr
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class ShippingAt(BaseModel):
@@ -15,7 +15,6 @@ class ShippingAt(BaseModel):
     address: str
     country: str
     zipCode: int
-
 
 class UserSchema(BaseModel):
     customerId: int = Field(...)
@@ -55,7 +54,7 @@ class UserSchema(BaseModel):
                     "lastName": "Giang",
                     "cname": "Long",
                     "email": "a.giang@gmail.com",
-                    "town_city": "Ho chi minh",
+                    "townCity": "Ho chi minh",
                     "phoneNumber": "+84 123456789",
                     "address": "53 barker street, Berminham, London",
                     "country": "England",
@@ -82,8 +81,8 @@ class CreateUserSchema(BaseModel):
     firstName: str
     lastName: str
     email: str
-    createdAt: datetime = Field(default_factory=datetime.now)
-    updatedAt: datetime = Field(default_factory=datetime.now)
+    createdAt: datetime = None
+    updatedAt: datetime = None
     password: str
     verified: bool = False
     cartId: str = ""
@@ -98,8 +97,10 @@ class UserResponseSchema(UserSchema):
     pass
 
 class AccountResponse(BaseModel):
-    status: str
     user: UserResponseSchema
+
+class VerifyMailSchema(BaseModel):
+    token: str
 
 def ResponseModel(data, message):
     return {
@@ -108,7 +109,6 @@ def ResponseModel(data, message):
         "message": message,
         "status": "OK"
     }
-
 
 def ErrorResponseModel(error, code, message):
     return {"error": error, "code": code, "message": message}

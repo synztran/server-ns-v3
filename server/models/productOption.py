@@ -18,7 +18,7 @@ class ParamsGet(BaseModel):
 
 class ProductOptionSchema(BaseModel):
     productOptionID: str = Field(...)
-    product_id: str
+    productId: str
     productOptionName: str
     productOptionPrice: float
     imageUrl: IImage

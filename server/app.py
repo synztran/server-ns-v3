@@ -8,8 +8,14 @@ from server.routers.auth import router as AuthRouter
 from server.routers.cart import router as CartRouter
 from server.api.v1.endpoint import user
 from server.routers.order import router as OrderRouter
+from server.routers.promotion import router as PromotionRouter
+from server.routers.config import router as ConfigRouter
+
+from server.core.utils import CustomHTTPException, custom_exception_handler
 
 app = FastAPI()
+app.add_exception_handler(CustomHTTPException, custom_exception_handler)
+
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -25,6 +31,8 @@ app.include_router(AuthRouter, tags=["Auth"], prefix="/auth")
 app.include_router(CartRouter, tags=["Cart"], prefix="/cart")
 app.include_router(user.router, tags=["User"], prefix="/users")
 app.include_router(OrderRouter, tags=["Order"], prefix="/order")
+app.include_router(PromotionRouter, tags=["Promotion"], prefix="/promotion")
+app.include_router(ConfigRouter, tags=["Config"], prefix="/config")
 
 app.add_middleware(
     CORSMiddleware,
